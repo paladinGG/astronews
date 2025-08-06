@@ -6,7 +6,30 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "convert-html": "node scripts/convert-html-to-mdx.js",
+    "update-authors": "node scripts/update-authors.js",
+    "fix-codeblocks": "node scripts/fix-mdx-codeblocks.js",
+    "fix-covers": "node scripts/fix-cover-images.js",
+    "create-covers": "node scripts/create-default-covers.js",
+    "update-cover-paths": "node scripts/update-cover-paths.js",
+    "fix-all": "node scripts/fix-all-issues.js",
+    "test-workflow": "node scripts/test-complete-workflow.js",
+    "add-articles": "node scripts/add-new-articles.js",
+    "fix-images": "node scripts/fix-image-paths.js",
+    "ensure-images": "node scripts/ensure-images.js",
+    "fix-covers": "node scripts/fix-cover-paths.js",
+    "fix-all-images": "node scripts/fix-all-image-issues.js",
+    "check-images": "node scripts/check-image-status.js",
+    "fix-images-comprehensive": "node scripts/fix-all-image-issues-comprehensive.js",
+    "add-articles-enhanced": "node scripts/add-new-articles-enhanced.js",
+    "fix-cover-paths": "node scripts/fix-cover-paths-to-assets.js",
+    "fix-mdx-codeblocks": "node scripts/fix-mdx-codeblocks.js",
+    "super-automation": "node scripts/super-automation.js",
+    "smart-fix": "node scripts/smart-fix.js",
+    "one-click-article": "node scripts/one-click-article.js",
+    "replace-articles": "node scripts/replace-articles.js",
+    "fix-youtube-links": "node scripts/fix-youtube-links.js"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
@@ -22,7 +45,6 @@
     "@tailwindcss/vite": "^4.1.4",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
-    "astro": "^5.7.0",
     "astro-pagefind": "^1.8.3",
     "date-fns": "^4.1.0",
     "mdast-util-to-string": "^4.0.0",
@@ -35,6 +57,7 @@
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.16",
+    "astro": "^5.12.8",
     "daisyui": "^5.0.20"
   }
 }

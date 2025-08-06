@@ -1,0 +1,146 @@
+---
+import BaseLayout from "@/layouts/base.astro";
+import { getEntry } from "astro:content";
+
+const entry = await getEntry("views", "cookie-policy");
+
+if (!entry) {
+  return Astro.redirect("/404");
+}
+---
+
+<BaseLayout entry={entry}>
+  <div class="container mx-auto px-4 py-8">
+    <div class="max-w-4xl mx-auto">
+      <div class="text-center mb-12">
+        <h1
+          class="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"
+        >
+          Cookie Policy
+        </h1>
+        <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+          Learn how we use cookies and similar technologies to enhance your
+          experience on our website.
+        </p>
+        <p class="text-sm text-gray-500 dark:text-gray-500 mt-4">
+          Last updated: {new Date().toLocaleDateString()}
+        </p>
+      </div>
+
+      <div class="space-y-8">
+        <section class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
+          <h2 class="text-2xl font-bold mb-4 text-gray-800 dark:text-gray-200">
+            What Are Cookies?
+          </h2>
+          <p class="text-gray-600 dark:text-gray-400 mb-4">
+            Cookies are small text files that are placed on your device when you
+            visit our website. They help us provide you with a better experience
+            by remembering your preferences and analyzing how you use our site.
+          </p>
+        </section>
+
+        <section class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
+          <h2 class="text-2xl font-bold mb-4 text-gray-800 dark:text-gray-200">
+            How We Use Cookies
+          </h2>
+          <p class="text-gray-600 dark:text-gray-400 mb-4">
+            We use cookies to remember your preferences, analyze website
+            traffic, provide personalized content, and improve our website's
+            functionality and performance.
+          </p>
+        </section>
+
+        <section class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
+          <h2 class="text-2xl font-bold mb-4 text-gray-800 dark:text-gray-200">
+            Types of Cookies We Use
+          </h2>
+          <div class="space-y-4">
+            <div>
+              <h3
+                class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2"
+              >
+                Essential Cookies
+              </h3>
+              <p class="text-gray-600 dark:text-gray-400">
+                These cookies are necessary for the website to function properly
+                and cannot be disabled.
+              </p>
+            </div>
+            <div>
+              <h3
+                class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2"
+              >
+                Analytics Cookies
+              </h3>
+              <p class="text-gray-600 dark:text-gray-400">
+                These cookies help us understand how visitors interact with our
+                website by collecting and reporting information anonymously.
+              </p>
+            </div>
+            <div>
+              <h3
+                class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2"
+              >
+                Preference Cookies
+              </h3>
+              <p class="text-gray-600 dark:text-gray-400">
+                These cookies remember your choices and preferences to provide
+                you with a more personalized experience.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
+          <h2 class="text-2xl font-bold mb-4 text-gray-800 dark:text-gray-200">
+            Managing Cookies
+          </h2>
+          <p class="text-gray-600 dark:text-gray-400 mb-4">
+            You can control and manage cookies through your browser settings.
+            However, disabling certain cookies may affect the functionality of
+            our website.
+          </p>
+        </section>
+
+        <section class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
+          <h2 class="text-2xl font-bold mb-4 text-gray-800 dark:text-gray-200">
+            Third-Party Cookies
+          </h2>
+          <p class="text-gray-600 dark:text-gray-400 mb-4">
+            Some cookies may be placed by third-party services that appear on
+            our pages. We do not control these cookies and they are subject to
+            the third party's privacy policy.
+          </p>
+        </section>
+
+        <section class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
+          <h2 class="text-2xl font-bold mb-4 text-gray-800 dark:text-gray-200">
+            Contact Us
+          </h2>
+          <p class="text-gray-600 dark:text-gray-400 mb-4">
+            If you have questions about our use of cookies, contact us at
+            privacy@skillnomad.com or through our contact form.
+          </p>
+        </section>
+      </div>
+
+      <div class="text-center mt-16">
+        <div
+          class="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-8 rounded-lg"
+        >
+          <h2 class="text-3xl font-bold mb-4">Questions About Cookies?</h2>
+          <p class="text-xl mb-6 opacity-90">
+            We're here to help explain our cookie usage and your options.
+          </p>
+          <a
+            href="/contact"
+            class="inline-block bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+          >
+            Contact Us
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+

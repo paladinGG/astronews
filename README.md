@@ -1,106 +1,106 @@
-# Astro News 📰
+# SkillNomad - Knowledge Platform
 
-A news website built with Astro, designed to provide a modern and responsive news reading experience.
+A modern knowledge platform built with Astro, featuring curated insights and practical playbooks for career growth.
 
-> **ℹ️ Info**  
-> Astro news is my first open-source project, so there may be some bugs or issues. I’ll address them as quickly as possible.
+## 🚀 Quick Start
 
-![Astro News](./src/assets/images/screenshot-astronews.png "Astro News")
+1. **Install dependencies:**
+   ```bash
+   npm install
+   ```
 
-![performances](./src/assets/images/Performances.png "Performances")
+2. **Start development server:**
+   ```bash
+   npm run dev
+   ```
 
-## 🌐 Demo
+3. **Open your browser:**
+   Navigate to `http://localhost:4321` (or the port shown in terminal)
 
-Explore the live demo here: [**Live Demo**](https://astro-news-six.vercel.app/)
+## 📝 Adding New Articles
 
-## 🚀 Installation
+### Automated Workflow (Recommended)
 
-Follow the steps below to set up and run the project locally:
-
-### Clone the Repository
-
-```bash
-git clone https://github.com/Mrahmani71/astro-news.git
-```
-
-### Install Dependencies
-
-``` bash
-bun install
-```
-
-### Run Development Server
+To add new HTML articles from the `newarticle` folder:
 
 ```bash
-bun dev
+npm run add-articles
 ```
 
-### Running Keystatic CMS
+This command will:
+1. Convert HTML files to MDX format
+2. Extract cover images from HTML content
+3. Fix all formatting issues
+4. Validate article integrity
 
-1. Rename `.env.example` to `.env`.
+### Manual Workflow
 
-2. Set `RUN_KEYSTATIC=true`.
+If you prefer to run steps individually:
 
-3. Start the development server:
+1. **Convert HTML to MDX:**
+   ```bash
+   npm run convert-html
+   ```
 
- ```bash
-    bun dev 
-  ```
+2. **Fix image paths:**
+   ```bash
+   npm run fix-images
+   ```
 
-4. Open `http://localhost:4321/keystatic` in your browser.
+3. **Fix all formatting issues:**
+   ```bash
+   npm run fix-all
+   ```
 
-## ✨ Features
+4. **Test workflow:**
+   ```bash
+   npm run test-workflow
+   ```
 
-### Implemented Features
+## 🛠️ Available Scripts
 
-- Content Layer
-- Keystatic CMS
-- Navigation
-- Responsive Design
-- Pagination
-- Search Functionality
-- RSS Feed
-- Sitemap
-- Dark Mode
-- SEO Optimization (~)
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+- `npm run convert-html` - Convert HTML articles to MDX
+- `npm run fix-images` - Fix image path formats
+- `npm run fix-all` - Fix all article formatting issues
+- `npm run test-workflow` - Validate article integrity
+- `npm run add-articles` - Complete automated article addition workflow
 
-### Upcoming Features
+## 📁 Project Structure
 
-- Open Graph (OG) Image Generation
+```
+src/
+├── content/
+│   ├── articles/     # Article MDX files
+│   ├── authors/      # Author profiles
+│   ├── categories/   # Category definitions
+│   └── views/        # Page metadata
+├── components/       # Astro components
+├── layouts/         # Page layouts
+├── pages/           # Route pages
+└── assets/
+    └── images/
+        └── articles/ # Article cover images
+```
 
-## 💻 Technologies
+## 🎯 Features
 
-This project leverages cutting-edge web technologies:
+- **Modern Design**: Clean, professional interface
+- **Content Collections**: Structured content management
+- **Image Optimization**: Automatic image processing
+- **SEO Optimized**: Built-in SEO features
+- **Responsive**: Mobile-first design
+- **Fast**: Static site generation
 
-- [Astro V5.7](https://astro.build) - Modern static site builder
-- [KeyStatic](https://keystatic.com) - Headless content-management system
-- [Tailwind CSS](https://tailwindcss.com) - Utility-first CSS framework
-- [DaisyUI](https://daisyui.com/) - Tailwind CSS component library
-- [TypeScript](https://typescriptlang.org) - Typed JavaScript
-- [MDX](https://mdxjs.com) - Markdown with JSX support
-- [Bun V1.2.10](https://bun.sh) - Fast JavaScript runtime
-- [Vercel](https://vercel.com) - Deployment platform
-- [HugeIcons](https://hugeicons.com) - Icon library
+## 🔧 Configuration
 
-## 💡  Inspirations and Code Concepts
-
-This project draws inspiration from the following sources:
-
-### Designs
-
-- [BBC News](https://www.bbc.com)
-- [NewsHub - News Website](https://dribbble.com/shots/21678041-NewsHub-News-Website)
-- [Let'sread - News Landing Page](https://dribbble.com/shots/24675325-Let-sread-News-Landing-Page)
-
-### Articles
-
-- [Creating A Pagination Component With Astro](https://rimdev.io/creating-a-pagination-component-with-astro)
-- [Adding search to static Astro sites](https://website-thomas-astro.vercel.app/blog/search-static-astro-website)
+Key configuration files:
+- `src/lib/config/index.ts` - Site configuration
+- `src/lib/schema/index.ts` - Content validation schemas
+- `astro.config.mjs` - Astro configuration
 
 ## 📄 License
 
-Open sourced under the [MIT license](LICENSE.md).
-
-## 🤝 Contributing
-
-Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/Mrahmani71/astro-news/issues).
+This project is licensed under the MIT License.
