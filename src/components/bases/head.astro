@@ -7,6 +7,7 @@ import "@fontsource-variable/source-serif-4";
 import { ClientRouter } from "astro:transitions";
 import { SITE } from "@/lib/config";
 import type { ArticleMeta, Meta } from "@/lib/types";
+import GoogleAnalytics from "@/components/GoogleAnalytics.astro";
 
 type Props = {
   meta: Meta | ArticleMeta;
@@ -96,4 +97,7 @@ const OGImage = new URL(meta.ogImage, Astro.url).href;
   }
 
   <ClientRouter />
+  
+  <!-- Google Analytics -->
+  <GoogleAnalytics />
 </head>

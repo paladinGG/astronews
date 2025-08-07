@@ -10,6 +10,7 @@ export const SITE = {
   charset: "UTF-8",
   basePath: "/",
   postsPerPage: 4,
+  googleAnalyticsId: "G-CDCLETJMND",
 };
 
 export const NAVIGATION_LINKS: Link[] = [

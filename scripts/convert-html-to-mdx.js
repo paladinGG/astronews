@@ -109,8 +109,21 @@ function extractContentFromHTML(htmlContent) {
     return `\n<YouTubeEmbed videoId="${videoId}" title="YouTube video" />\n`;
   });
 
-  // 转换HTML标签为Markdown
-  content = content.replace(/<h1[^>]*>([^<]+)<\/h1>/gi, '# $1\n\n');
+  // 转换HTML标签为Markdown - 但不转换与标题相同的h1标签，避免重复
+  // 首先提取标题，稍后用来检查重复
+  const titleForComparison = title.toLowerCase().trim();
+  
+  // 转换h1标签，但跳过与文章标题相同的
+  content = content.replace(/<h1[^>]*>([^<]+)<\/h1>/gi, (match, h1Content) => {
+    const h1Text = h1Content.trim().toLowerCase();
+    if (h1Text === titleForComparison) {
+      // 如果h1与标题相同，则跳过（不转换）
+      console.log(`跳过重复的h1标题: ${h1Content}`);
+      return '';  // 返回空字符串，删除重复标题
+    }
+    return `# ${h1Content}\n\n`;
+  });
+  
   content = content.replace(/<h2[^>]*>([^<]+)<\/h2>/gi, '## $1\n\n');
   content = content.replace(/<h3[^>]*>([^<]+)<\/h3>/gi, '### $1\n\n');
   content = content.replace(/<h4[^>]*>([^<]+)<\/h4>/gi, '#### $1\n\n');
