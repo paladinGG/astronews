@@ -65,6 +65,9 @@ async function superAutomation() {
 
     await runCommand('npm run fix-mdx-codeblocks', '修复MDX代码块格式');
     await runCommand('npm run fix-youtube-links', '修复YouTube链接为嵌入组件');
+    await runCommand('npm run fix-list-items', '修复列表项格式问题');
+    await runCommand('npm run localize-images', '本地化所有外部图片');
+    await runCommand('npm run fix-missing-images', '修复缺失的图片');
 
     // 阶段4: 缓存清理和验证
     console.log('\n📋 阶段4: 缓存清理和验证');

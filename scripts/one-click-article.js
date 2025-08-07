@@ -69,6 +69,9 @@ async function oneClickArticle() {
     await runCommand('npm run fix-cover-paths', '修复封面路径为@assets别名');
     await runCommand('npm run fix-mdx-codeblocks', '修复MDX代码块格式');
     await runCommand('npm run fix-youtube-links', '修复YouTube链接为嵌入组件');
+    await runCommand('npm run fix-list-items', '修复列表项格式问题');
+    await runCommand('npm run localize-images', '本地化所有外部图片');
+    await runCommand('npm run fix-missing-images', '修复缺失的图片');
 
     // 阶段3: 验证和清理
     console.log('\n📋 阶段3: 验证和清理');

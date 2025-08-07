@@ -21,7 +21,10 @@ function isActive(item: Link, currentPath: string) {
 }
 
 function formatHref(href: string) {
-  return href === "/" ? "/" : `${href}/1`;
+  // 只有Articles页面需要分页，其他页面直接返回原始href
+  if (href === "/") return "/";
+  if (href === "/articles") return `${href}/1`;
+  return href;
 }
 ---
 

@@ -1,4 +1,4 @@
-# SkillNomad - Knowledge Platform
+# EntryEarns - Knowledge Platform
 
 A modern knowledge platform built with Astro, featuring curated insights and practical playbooks for career growth.
 

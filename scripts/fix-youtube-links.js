@@ -20,7 +20,7 @@ function convertYouTubeLinks(content) {
   
   // 查找YouTube链接并替换为嵌入组件
   modifiedContent = modifiedContent.replace(
-    /https?:\/\/(?:www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/gi,
+    /https?:\/\/(?:www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)(?:[&?][^\s<]*)?/gi,
     (match, videoId) => {
       hasYouTubeEmbed = true;
       return `\n<YouTubeEmbed videoId="${videoId}" title="YouTube video" />\n`;

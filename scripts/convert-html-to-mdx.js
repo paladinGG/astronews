@@ -23,6 +23,28 @@ function slugify(text) {
     .replace(/(^-|-$)/g, '');
 }
 
+// 从URL中提取文件名
+function extractFileNameFromUrl(url) {
+  const urlParts = url.split('/');
+  const lastPart = urlParts[urlParts.length - 1];
+
+  // 如果URL以.jpg结尾，直接使用
+  if (lastPart.includes('.jpg') || lastPart.includes('.jpeg') || lastPart.includes('.png')) {
+    return lastPart;
+  }
+
+  // 否则生成一个基于URL哈希的文件名
+  const urlHash = url.replace(/[^a-zA-Z0-9]/g, '').substring(0, 10);
+  return `${urlHash}.jpg`;
+}
+
+// 提取内容中的外部图片URL
+function extractExternalImages(content) {
+  const imageRegex = /!\[([^\]]*)\]\((https:\/\/[^)]+)\)/g;
+  const matches = [...content.matchAll(imageRegex)];
+  return matches.map(match => match[2]);
+}
+
 function downloadImage(url, targetPath) {
   return new Promise((resolve, reject) => {
     https.get(url, (response) => {
@@ -81,6 +103,12 @@ function extractContentFromHTML(htmlContent) {
   content = content.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
   content = content.replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '');
 
+  // 处理YouTube链接 - 必须在p标签处理之前
+  content = content.replace(/<p[^>]*>(https?:\/\/(?:www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)[^<]*)<\/p>/gi, (match, fullUrl, videoId) => {
+    // 只使用videoId，忽略其他URL参数
+    return `\n<YouTubeEmbed videoId="${videoId}" title="YouTube video" />\n`;
+  });
+
   // 转换HTML标签为Markdown
   content = content.replace(/<h1[^>]*>([^<]+)<\/h1>/gi, '# $1\n\n');
   content = content.replace(/<h2[^>]*>([^<]+)<\/h2>/gi, '## $1\n\n');
@@ -89,39 +117,36 @@ function extractContentFromHTML(htmlContent) {
   content = content.replace(/<h5[^>]*>([^<]+)<\/h5>/gi, '##### $1\n\n');
   content = content.replace(/<h6[^>]*>([^<]+)<\/h6>/gi, '###### $1\n\n');
 
-  content = content.replace(/<p[^>]*>([^<]+)<\/p>/gi, '$1\n\n');
+  content = content.replace(/<p[^>]*>([\s\S]*?)<\/p>/gi, '$1\n\n');
   content = content.replace(/<br\s*\/?>/gi, '\n');
   content = content.replace(/<strong[^>]*>([^<]+)<\/strong>/gi, '**$1**');
   content = content.replace(/<b[^>]*>([^<]+)<\/b>/gi, '**$1**');
   content = content.replace(/<em[^>]*>([^<]+)<\/em>/gi, '*$1*');
   content = content.replace(/<i[^>]*>([^<]+)<\/i>/gi, '*$1*');
 
-  // 处理列表
-  content = content.replace(/<ul[^>]*>([\s\S]*?)<\/ul>/gi, (match, listContent) => {
-    return listContent.replace(/<li[^>]*>([^<]+)<\/li>/gi, '- $1\n') + '\n';
-  });
 
-  content = content.replace(/<ol[^>]*>([\s\S]*?)<\/ol>/gi, (match, listContent) => {
-    let counter = 1;
-    return listContent.replace(/<li[^>]*>([^<]+)<\/li>/gi, () => `${counter++}. $1\n`) + '\n';
-  });
 
-  // 处理图片标签
-  content = content.replace(/<img[^>]*src=["']([^"']+)["'][^>]*alt=["']([^"']*)["'][^>]*>/gi, '![$2]($1)');
-  content = content.replace(/<img[^>]*src=["']([^"']+)["'][^>]*>/gi, '![]($1)');
-
-  // 处理表格标签 - 转换为Markdown表格
+  // 处理表格标签 - 转换为Markdown表格（在所有其他处理之前）
   content = content.replace(/<table[^>]*>([\s\S]*?)<\/table>/gi, (match, tableContent) => {
     const rows = tableContent.match(/<tr[^>]*>([\s\S]*?)<\/tr>/gi);
     if (!rows) return '';
 
-    let markdownTable = '';
+    let markdownTable = '\n';
     rows.forEach((row, index) => {
       const cells = row.match(/<t[dh][^>]*>([\s\S]*?)<\/t[dh]>/gi);
       if (!cells) return;
 
       const cleanCells = cells.map(cell => {
-        return cell.replace(/<t[dh][^>]*>([\s\S]*?)<\/t[dh]>/i, '$1').trim();
+        // 清理单元格内容中的HTML标签
+        let cleanContent = cell.replace(/<t[dh][^>]*>([\s\S]*?)<\/t[dh]>/i, '$1');
+        cleanContent = cleanContent
+          .replace(/<strong[^>]*>([^<]+)<\/strong>/gi, '**$1**')
+          .replace(/<b[^>]*>([^<]+)<\/b>/gi, '**$1**')
+          .replace(/<em[^>]*>([^<]+)<\/em>/gi, '*$1*')
+          .replace(/<i[^>]*>([^<]+)<\/i>/gi, '*$1*')
+          .replace(/<[^>]*>/g, '')
+          .trim();
+        return cleanContent;
       });
 
       markdownTable += '| ' + cleanCells.join(' | ') + ' |\n';
@@ -133,6 +158,15 @@ function extractContentFromHTML(htmlContent) {
     });
 
     return markdownTable + '\n';
+  });
+
+  // 处理图片标签 - 先转换为Markdown格式，稍后替换路径
+  content = content.replace(/<img[^>]*src=["']([^"']+)["'][^>]*alt=["']([^"']*)["'][^>]*>/gi, (match, src, alt) => {
+    return `![${alt}](${src})\n\n`;
+  });
+
+  content = content.replace(/<img[^>]*src=["']([^"']+)["'][^>]*>/gi, (match, src) => {
+    return `![](${src})\n\n`;
   });
 
   // 处理div和其他容器标签
@@ -153,28 +187,87 @@ function extractContentFromHTML(htmlContent) {
     return `> ${cleanQuote}\n\n`;
   });
 
-  // 处理YouTube链接 - 转换为嵌入组件
-  content = content.replace(/https?:\/\/(?:www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/gi, (match, videoId) => {
-    return `\n<YouTubeEmbed videoId="${videoId}" title="YouTube video" />\n`;
+
+
+  // 处理代码块 - 确保正确的格式
+  content = content.replace(/<pre[^>]*><code[^>]*>([\s\S]*?)<\/code><\/pre>/gi, (match, codeContent) => {
+    // 检测代码语言
+    const langMatch = match.match(/class=["']language-([^"']+)["']/i);
+    const language = langMatch ? langMatch[1] : '';
+    const codeBlock = language ? `\`\`\`${language}\n${codeContent.trim()}\n\`\`\`` : `\`\`\`\n${codeContent.trim()}\n\`\`\``;
+    return codeBlock + '\n\n';
   });
-  
+
+  // 处理内联代码
+  content = content.replace(/<code[^>]*>([^<]+)<\/code>/gi, '`$1`');
+
   // 处理链接
   content = content.replace(/<a[^>]*href=["']([^"']+)["'][^>]*>([^<]+)<\/a>/gi, '[$2]($1)');
 
+  // 处理单独的YouTube链接（不在p标签内）
+  content = content.replace(/(https?:\/\/(?:www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)[^\s<]*)/gi, (match, fullUrl, videoId) => {
+    // 只使用videoId，忽略其他URL参数
+    return `\n<YouTubeEmbed videoId="${videoId}" title="YouTube video" />\n`;
+  });
+
   // 处理剩余的HTML标签
-  content = content.replace(/<p[^>]*>([^<]+)<\/p>/gi, '$1\n\n');
+  content = content.replace(/<p[^>]*>([\s\S]*?)<\/p>/gi, '$1\n\n');
   content = content.replace(/<br\s*\/?>/gi, '\n');
   content = content.replace(/<strong[^>]*>([^<]+)<\/strong>/gi, '**$1**');
   content = content.replace(/<b[^>]*>([^<]+)<\/b>/gi, '**$1**');
   content = content.replace(/<em[^>]*>([^<]+)<\/em>/gi, '*$1*');
   content = content.replace(/<i[^>]*>([^<]+)<\/i>/gi, '*$1*');
 
-  // 移除所有剩余的HTML标签
-  content = content.replace(/<[^>]*>/g, '');
+  // 移除所有剩余的HTML标签（除了列表标签）
+  content = content.replace(/<(?!\/?(?:ul|ol|li))[^>]*>/g, '');
+
+  // 处理列表 - 在所有其他处理之后
+  content = content.replace(/<ul[^>]*>([\s\S]*?)<\/ul>/gi, (match, listContent) => {
+    return listContent.replace(/<li[^>]*>([\s\S]*?)<\/li>/gi, (match, itemContent) => {
+      // 清理列表项内容中的HTML标签
+      const cleanContent = itemContent
+        .replace(/<strong[^>]*>([^<]+)<\/strong>/gi, '**$1**')
+        .replace(/<b[^>]*>([^<]+)<\/b>/gi, '**$1**')
+        .replace(/<em[^>]*>([^<]+)<\/em>/gi, '*$1*')
+        .replace(/<i[^>]*>([^<]+)<\/i>/gi, '*$1*')
+        .replace(/<[^>]*>/g, '')
+        .trim();
+      return `- ${cleanContent}\n`;
+    }) + '\n';
+  });
+
+  content = content.replace(/<ol[^>]*>([\s\S]*?)<\/ol>/gi, (match, listContent) => {
+    let counter = 1;
+    return listContent.replace(/<li[^>]*>([\s\S]*?)<\/li>/gi, (match, itemContent) => {
+      // 清理列表项内容中的HTML标签
+      const cleanContent = itemContent
+        .replace(/<strong[^>]*>([^<]+)<\/strong>/gi, '**$1**')
+        .replace(/<b[^>]*>([^<]+)<\/b>/gi, '**$1**')
+        .replace(/<em[^>]*>([^<]+)<\/em>/gi, '*$1*')
+        .replace(/<i[^>]*>([^<]+)<\/i>/gi, '*$1*')
+        .replace(/<[^>]*>/g, '')
+        .trim();
+      return `${counter++}. ${cleanContent}\n`;
+    }) + '\n';
+  });
 
   // 清理多余的空白字符
   content = content.replace(/\n\s*\n\s*\n/g, '\n\n');
   content = content.trim();
+
+  // 清理重复的代码块标记
+  content = content.replace(/```css\n```css/g, '```css');
+  content = content.replace(/```javascript\n```javascript/g, '```javascript');
+  content = content.replace(/```js\n```js/g, '```js');
+  content = content.replace(/```html\n```html/g, '```html');
+  content = content.replace(/```\n```/g, '```');
+
+  // 清理嵌套的代码块标记
+  content = content.replace(/```css\n```css\n([\s\S]*?)```\n```/g, '```css\n$1```');
+  content = content.replace(/```javascript\n```javascript\n([\s\S]*?)```\n```/g, '```javascript\n$1```');
+  content = content.replace(/```js\n```js\n([\s\S]*?)```\n```/g, '```js\n$1```');
+  content = content.replace(/```html\n```html\n([\s\S]*?)```\n```/g, '```html\n$1```');
+  content = content.replace(/```\n```\n([\s\S]*?)```\n```/g, '```\n$1```');
 
   return { title, description, content, coverImageUrl };
 }
@@ -182,7 +275,7 @@ function extractContentFromHTML(htmlContent) {
 function createMdxContent(title, description, content, author, category = 'productivity') {
   const slug = slugify(title);
   const now = new Date().toISOString();
-  
+
   // 检查内容是否包含YouTube嵌入组件
   const hasYouTubeEmbed = content.includes('<YouTubeEmbed');
   const importStatement = hasYouTubeEmbed ? 'import YouTubeEmbed from "@/components/YouTubeEmbed.astro";\n\n' : '';
@@ -261,8 +354,30 @@ async function processHtmlFile(htmlFilePath) {
       console.log(`📄 使用默认封面图片`);
     }
 
+    // 下载内容中的外部图片并替换路径
+    const externalImages = extractExternalImages(content);
+    let modifiedContent = content;
+
+    for (const imageUrl of externalImages) {
+      try {
+        const fileName = extractFileNameFromUrl(imageUrl);
+        const imagePath = path.join(imagesDir, fileName);
+        await downloadImage(imageUrl, imagePath);
+        console.log(`✅ 下载内容图片: ${fileName}`);
+
+        // 替换内容中的图片路径
+        const localImageUrl = `@assets/images/articles/${slug}/${fileName}`;
+        modifiedContent = modifiedContent.replace(
+          new RegExp(`!\\[([^\\]]*)\\]\\(${imageUrl.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\)`, 'g'),
+          `![$1](${localImageUrl})`
+        );
+      } catch (error) {
+        console.log(`⚠️  内容图片下载失败: ${imageUrl} - ${error.message}`);
+      }
+    }
+
     // 创建MDX内容
-    const mdxContent = createMdxContent(title, description, content, CONFIG.defaultAuthor);
+    const mdxContent = createMdxContent(title, description, modifiedContent, CONFIG.defaultAuthor);
 
     // 保存MDX文件
     const mdxPath = path.join(articleDir, 'index.mdx');

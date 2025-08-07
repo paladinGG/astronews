@@ -1,7 +1,6 @@
 ---
-import { NAVIGATION_LINKS, SOCIAL_LINKS, OTHER_LINKS } from "@/lib/config";
+import { NAVIGATION_LINKS, OTHER_LINKS } from "@/lib/config";
 import Hashtag from "@/assets/svgs/hashtag.astro";
-import Icon from "../bases/icon.astro";
 ---
 
 <footer
@@ -12,7 +11,7 @@ import Icon from "../bases/icon.astro";
       <aside class="flex items-center gap-2">
         <Hashtag />
         <p>
-          <strong class="text-lg">SkillNomad</strong>
+          <strong class="text-lg">EntryEarns</strong>
           <br />
           Entry-level friendly, professional-grade outcomes.
         </p>
@@ -33,28 +32,6 @@ import Icon from "../bases/icon.astro";
     </div>
     <div class="divider w-full h-1"></div>
     <div class="flex flex-col gap-4">
-      <nav>
-        <div class="flex gap-4">
-          <p class="font-bold">Social Media:</p>
-          <ul class="flex flex-wrap gap-4">
-            {
-              SOCIAL_LINKS.map(({ href, icon, text, target }) => (
-                <li>
-                  <a
-                    href={href}
-                    class="link link-hover"
-                    target={target ?? "_blank"}
-                    title={text}
-                    aria-label={text}
-                  >
-                    <Icon icon={icon} />
-                  </a>
-                </li>
-              ))
-            }
-          </ul>
-        </div>
-      </nav>
       <nav class="flex flex-wrap gap-4 text-xs mt-2">
         {
           OTHER_LINKS.map(({ href, text, target }) => (

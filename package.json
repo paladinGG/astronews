@@ -1,5 +1,5 @@
 {
-  "name": "astro-news",
+  "name": "entryearns",
   "type": "module",
   "version": "0.0.1",
   "scripts": {
@@ -29,7 +29,17 @@
     "smart-fix": "node scripts/smart-fix.js",
     "one-click-article": "node scripts/one-click-article.js",
     "replace-articles": "node scripts/replace-articles.js",
-    "fix-youtube-links": "node scripts/fix-youtube-links.js"
+    "fix-youtube-links": "node scripts/fix-youtube-links.js",
+    "fix-all-youtube": "node scripts/fix-all-youtube-embeds.js",
+    "fix-list-items": "node scripts/fix-list-items.js",
+    "update-publish-times": "node scripts/update-publish-times.js",
+    "localize-images": "node scripts/download-and-localize-images.js",
+    "test-image-localization": "node scripts/test-image-localization.js",
+    "fix-missing-images": "node scripts/fix-missing-images.js",
+    "complete-image-localization": "node scripts/complete-image-localization.js",
+    "clean-corrupted-images": "node scripts/clean-corrupted-images.js",
+    "reprocess-all": "node scripts/reprocess-all-articles.js",
+    "fix-nested-codeblocks": "node scripts/fix-nested-codeblocks.js"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",

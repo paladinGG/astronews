@@ -1,10 +1,10 @@
 import type { Link } from "../types";
 
 export const SITE = {
-  title: "SkillNomad",
+  title: "EntryEarns",
   description: "A knowledge platform for skill development and insights",
-  author: "SkillNomad Team",
-  url: "https://skillnomad.com",
+  author: "EntryEarns Team",
+  url: "https://entryearns.com",
   locale: "en-US",
   dir: "ltr",
   charset: "UTF-8",
@@ -44,17 +44,17 @@ export const OTHER_LINKS: Link[] = [
 
 export const SOCIAL_LINKS: Link[] = [
   {
-    href: "https://t.me/skillnomad",
+    href: "https://t.me/entryearns",
     text: "Telegram",
     icon: "telegram",
   },
   {
-    href: "https://twitter.com/skillnomad",
+    href: "https://twitter.com/entryearns",
     text: "Twitter",
     icon: "newTwitter",
   },
   {
-    href: "https://www.facebook.com/skillnomad",
+    href: "https://www.facebook.com/entryearns",
     text: "Facebook",
     icon: "facebook",
   },

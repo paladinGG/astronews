@@ -59,9 +59,11 @@ npm run fix-cover-paths
 ```bash
 npm run fix-mdx-codeblocks
 ```
-- 修复MDX文件中的CSS和HTML代码块格式
+- 修复重复的代码块标记（如 ```css\n```css）
+- 清理代码块内部的嵌套问题
+- 确保代码块格式正确显示
+- 修复CSS、JavaScript、HTML代码块的格式问题
 - 解决"Could not parse expression with acorn"错误
-- 确保代码块正确使用反引号包围
 
 ### 修复YouTube链接为嵌入组件
 ```bash
@@ -71,6 +73,61 @@ npm run fix-youtube-links
 - 将YouTube链接转换为嵌入播放器组件
 - 自动添加必要的导入语句
 - 提供更好的用户体验
+
+### 修复列表项格式问题
+```bash
+npm run fix-list-items
+```
+- 修复列表项中的$200、$1等错误内容
+- 根据上下文智能推断正确的列表内容
+- 修复HTML到MDX转换过程中的列表截断问题
+- 确保列表项显示正确的内容
+
+### 更新文章发布时间
+```bash
+npm run update-publish-times
+```
+- 将集中发布的文章时间重新分布
+- 在3周时间范围内随机分配发布时间
+- 确保时间在合理的工作时间内（9:00-18:00）
+- 让文章发布时间看起来更自然和真实
+
+### 图片本地化
+```bash
+npm run localize-images
+```
+- 下载所有文章中的外部图片到本地
+- 自动替换文章中的外部图片链接为本地路径
+- 使用 @assets 别名路径，提高加载速度
+- 减少对外部CDN服务的依赖
+- 适用于现有文章和新上传的文章
+
+### 修复缺失图片
+```bash
+npm run fix-missing-images
+```
+- 为无法下载的外部图片创建本地占位图片
+- 确保所有图片链接都指向本地文件
+- 避免因外部图片失效导致的显示问题
+- 自动处理404和403等下载错误
+
+### 测试图片本地化状态
+```bash
+npm run test-image-localization
+```
+- 检查所有文章的图片本地化状态
+- 统计外部图片和本地图片数量
+- 验证本地图片文件是否存在
+- 提供详细的本地化报告
+
+### 清理损坏的图片文件
+```bash
+npm run clean-corrupted-images
+```
+- 检测并删除损坏的图片文件
+- 自动重新创建有效的占位图片
+- 解决 "NoImageMetadata" 错误
+- 确保所有图片文件格式正确
 
 ## 🛠️ 其他维护脚本
 

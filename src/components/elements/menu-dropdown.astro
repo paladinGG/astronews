@@ -1,6 +1,5 @@
 ---
 import Menu from "@/assets/svgs/menu.astro";
-import { NAVIGATION_LINKS, OTHER_LINKS } from "@/lib/config";
 ---
 
 <div class="dropdown">
@@ -19,39 +18,6 @@ import { NAVIGATION_LINKS, OTHER_LINKS } from "@/lib/config";
   >
     <li><a href="/" aria-label="Homepage">Home</a></li>
     <li><a href="/articles" aria-label="Articles Page">Articles</a></li>
-
-    <li>
-      <details>
-        <summary>Categories</summary>
-        <ul>
-          {
-            NAVIGATION_LINKS.map(({ href, text, target }) => (
-              <li>
-                <a href={href} target={target ?? "_self"} aria-label={text}>
-                  {text}
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </details>
-    </li>
-
-    <li>
-      <details>
-        <summary>Other Pages</summary>
-        <ul>
-          {
-            OTHER_LINKS.map(({ href, text, target }) => (
-              <li>
-                <a href={href} target={target ?? "_self"} aria-label={text}>
-                  {text}
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </details>
-    </li>
+    <li><a href="/about" aria-label="About Page">About</a></li>
   </ul>
 </div>
