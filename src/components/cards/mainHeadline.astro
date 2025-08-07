@@ -4,7 +4,7 @@ import type { CollectionEntry } from "astro:content";
 import { render } from "astro:content";
 import Divider from "@/components/bases/divider.astro";
 import { categoriesHandler } from "@/lib/handlers/categories";
-import { getDateDistance } from "@/lib/utils/date";
+import { getSafeDateDistance } from "@/lib/utils/safeDate";
 
 type Props = {
   article: CollectionEntry<"articles">;
@@ -46,7 +46,7 @@ const category = categoriesHandler.oneCategory(article.data.category.id);
       <span class="text-primary dark:text-secondary">{category.data.title}</span
       >
       <Divider />
-      <span>{getDateDistance(remarkPluginFrontmatter.lastModified)}</span>
+      <span>{getSafeDateDistance(article.data.publishedTime)}</span>
     </div>
   </div>
 </article>
