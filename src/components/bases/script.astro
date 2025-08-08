@@ -6,12 +6,16 @@
         : selector;
     if (matches && matches.length) {
       matches.forEach((elem) => {
-        elem.addEventListener(event, (e) => fn(e, elem), false);
+        // Remove existing listeners to avoid duplicates
+        elem.removeEventListener(event, elem._shareHandler);
+        // Create bound handler and store reference for cleanup
+        elem._shareHandler = (e) => fn(e, elem);
+        elem.addEventListener(event, elem._shareHandler, false);
       });
     }
   }
 
-  window.onload = function () {
+  function initializeShare() {
     attachEvent("[data-aw-social-share]", "click", function (_, elem) {
       const network = elem.getAttribute("data-aw-social-share");
       const url = encodeURIComponent(elem.getAttribute("data-aw-url"));
@@ -50,5 +54,18 @@
       newlink.href = href;
       newlink.click();
     });
-  };
+  }
+
+  // Initialize immediately if DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeShare);
+  } else {
+    initializeShare();
+  }
+
+  // Also initialize on window load as fallback
+  window.addEventListener('load', initializeShare);
+  
+  // For client-side navigation (if using view transitions or similar)
+  document.addEventListener('astro:page-load', initializeShare);
 </script>

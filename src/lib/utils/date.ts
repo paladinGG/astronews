@@ -1,7 +1,7 @@
 import { formatDistanceToNow, parseISO, format } from "date-fns";
 
-const FORMAT_LONG = "EEEE, MMMM d, yyyy h:mm a zz";
-const FORMAT_SHORT = "MMMM dd, yyyy zz";
+const FORMAT_LONG = "EEEE, MMMM d, yyyy";
+const FORMAT_SHORT = "MMMM d, yyyy";
 
 const dateCache = new Map<string, Date>();
 
